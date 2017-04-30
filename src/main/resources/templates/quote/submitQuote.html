@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="layout :: htmlhead" th:with="title='Hello'"></head>
+
+<body>
+
+<div th:replace="layout :: navbar">(navbar)</div>
+
+
+<div class="container">
+    <div class="starter-template">
+        <h1>Add New Quote</h1>
+        <!--<p class="lead" th:text="${greeting}">(greeting)</p>-->
+        <!--<p>The current time is <span th:text="${currentTime}">(time)</span></p>-->
+        <div th:if="${status != null}">
+            <div class="alert  alert-dismissible" role="alert">
+                <strong th:text="${status}"></strong>
+            </div>
+        </div>
+
+        <form  th:action="@{/admin/quote}" th:object="${editQuote}" method="post" enctype="multipart/form-data">
+            <!--<p>Id: <input type="text" th:field="*{id}" /></p>-->
+            <input type="hidden" th:field="*{id}"/>
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input id="name"  class="form-control" type="text" th:field="*{name}" placeholder="Quote Name"/>
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <input id="description"  class="form-control" type="text" th:field="*{description}" placeholder="Quote Description"/>
+            </div>
+
+            <!--<div class="form-group">-->
+                <!--<label for="description">Virtue</label>-->
+                <!--<input id="description"  class="form-control" type="text" th:field="*{virtueId}" />-->
+            <!--</div>-->
+
+            <div class="form-group">
+                <label for="exampleSelect1">Virtue</label>
+                <select th:field="*{virtue}" class="form-control" id="exampleSelect1">
+                    <option th:each="virtue : ${editQuote.virtues}" th:value="${virtue.id}"th:text="${virtue.name}" ></option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="exampleSelect1">Author</label>
+                <select th:field="*{author}" class="form-control" id="exampleSelect1">
+                    <option th:each="author : ${editQuote.authors}" th:value="${author.id}"th:text="${author.name}" ></option>
+                </select>
+            </div>
+
+            <!--<div class="form-group">-->
+                <!--<label for="description">Author</label>-->
+                <!--<input id="description"  class="form-control" type="text" th:field="*{authorId}" />-->
+            <!--</div>-->
+
+            <div class="form-group">
+                <label for="file">Quote Image:</label>
+                <input id="file"  class="form-control" type="file" name="file" />
+            </div>
+
+           <input type="submit" value="Submit" /> <input type="reset" value="Reset" />
+        </form>
+    </div>
+
+
+
+</div>
+
+
+
+
+<div th:include="layout :: footer" id="footer">(footer)</div>
+
+</body>
+</html>
