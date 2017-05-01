@@ -1,0 +1,14 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<div id="fh5co-board" data-columns th:each="quote : ${quoteBrowser.quoteUIModelList}">
+
+
+    <div class="item">
+        <div class="animate-box">
+            <a th:href="@{${quote.imageRelativeUrl}}" class="image-popup fh5co-board-img" th:title="${quote.name}"><img th:src="${quote.imageRelativeUrl}" th:alt="${quote.description}"></a>
+        </div>
+        <!--<div class="fh5co-desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo, eos?</div>-->
+    </div>
+
+</div>
+</html>

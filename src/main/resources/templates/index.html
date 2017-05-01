@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+
+	<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Life Quotes</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Free HTML5 Template by FREEHTML5.CO" />
+	<meta name="keywords" content="free html5, free template, free bootstrap, html5, css3, mobile first, responsive" />
+	<meta name="author" content="FREEHTML5.CO" />
+
+  <!-- 
+	//////////////////////////////////////////////////////
+
+	FREE HTML5 TEMPLATE 
+	DESIGNED & DEVELOPED by FREEHTML5.CO
+		
+	Website: 		http://freehtml5.co/
+	Email: 			info@freehtml5.co
+	Twitter: 		http://twitter.com/fh5co
+	Facebook: 		https://www.facebook.com/fh5co
+
+	//////////////////////////////////////////////////////
+	 -->
+
+  <!-- Facebook and Twitter integration -->
+	<meta property="og:title" content=""/>
+	<meta property="og:image" content=""/>
+	<meta property="og:url" content=""/>
+	<meta property="og:site_name" content=""/>
+	<meta property="og:description" content=""/>
+	<meta name="twitter:title" content="" />
+	<meta name="twitter:image" content="" />
+	<meta name="twitter:url" content="" />
+	<meta name="twitter:card" content="" />
+
+	<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+	<link rel="shortcut icon" href="favicon.ico">
+
+	<!-- Google Webfonts -->
+	<link href='http://fonts.googleapis.com/css?family=Roboto:400,300,100,500' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+	
+	<!-- Animate.css -->
+	<link rel="stylesheet" href="css/animate.css">
+	<!-- Icomoon Icon Fonts-->
+	<link rel="stylesheet" href="css/icomoon.css">
+	<!-- Magnific Popup -->
+	<link rel="stylesheet" href="css/magnific-popup.css">
+	<!-- Salvattore -->
+	<link rel="stylesheet" href="css/salvattore.css">
+	<!-- Theme Style -->
+	<link rel="stylesheet" href="css/style.css">
+	<!-- Modernizr JS -->
+	<script src="js/modernizr-2.6.2.min.js"></script>
+	<!-- FOR IE9 below -->
+	<!--[if lt IE 9]>
+	<script src="js/respond.min.js"></script>
+
+	<![endif]-->
+
+		<style>
+			body {margin:0;}
+
+			.navbar {
+				overflow: hidden;
+				background-color: #FFDF00;
+				position: fixed;
+				top: 0;
+				width: 100%;
+				z-index: 10;
+			}
+
+			.navbar  a {
+				float: left;
+				display: block;
+				color: 	#FF00FF;
+				text-align: center;
+				padding: 14px 16px;
+				text-decoration: none;
+				font-size: 17px;
+
+			}
+
+			.main {
+				padding: 16px;
+				margin-top: 30px;
+				height: 1500px; /* Used in this example to enable scrolling */
+			}
+		</style>
+
+
+	</head>
+	<body>
+	<div class="navbar">
+		<div th:each="virtue : ${virtues}">
+			<a th:href="@{/(virtue_id=${virtue.id})}" th:text="${virtue.name}"></a>
+		</div>
+
+		<a href="#contact">Contact</a>
+		<a href="#about">About</a>
+	</div>
+		
+	<div id="fh5co-offcanvass">
+		<a href="#" class="fh5co-offcanvass-close js-fh5co-offcanvass-close">Menu <i class="icon-cross"></i> </a>
+		<h1 class="fh5co-logo"><a class="navbar-brand" href="index.html">Life Quotes</a></h1>
+		<ul>
+			<li class="active"><a href="index.html">Home</a></li>
+			<li><a href="about.html">About</a></li>
+			<li><a href="pricing.html">Pricing</a></li>
+			<li><a href="contact.html">Contact</a></li>
+		</ul>
+		<h3 class="fh5co-lead">Connect with us</h3>
+		<p class="fh5co-social-icons">
+			<a href="#"><i class="icon-twitter"></i></a>
+			<a href="#"><i class="icon-facebook"></i></a>
+			<a href="#"><i class="icon-instagram"></i></a>
+			<a href="#"><i class="icon-dribbble"></i></a>
+			<a href="#"><i class="icon-youtube"></i></a>
+		</p>
+	</div>
+	<header id="fh5co-header" role="banner">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<a href="#" class="fh5co-menu-btn js-fh5co-menu-btn">Menu <i class="icon-menu"></i></a>
+					<a class="navbar-brand" href="index.html">Life Quotes</a>
+				</div>
+			</div>
+		</div>
+	</header>
+	<!-- END .header -->
+	
+	
+	<div id="fh5co-main">
+		<div class="container">
+
+			<div class="row">
+
+				<div class="fh5co-board" th:if="${#lists.isEmpty(quoteBrowser.quoteUIModelList)}" class="btn-warning">
+					<div class="fh5co-desc">No Quotes Yet!!!</div>
+				</div>
+
+        	<div id="fh5co-board" data-columns th:each="quote : ${quoteBrowser.quoteUIModelList}">
+
+
+				<div class="item">
+					<div class="animate-box">
+						<a th:href="@{${quote.imageRelativeUrl}}" class="image-popup fh5co-board-img" th:title="${quote.name}"><img th:src="${quote.imageRelativeUrl}" th:alt="${quote.description}"></a>
+					</div>
+					<!--<div class="fh5co-desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo, eos?</div>-->
+				</div>
+
+        	</div>
+
+
+        </div>
+
+			<div class="row text-center">
+
+				<div th:fragment='paginationbar'>
+					<div class='pagination pagination-centered'>
+						<ul class="pagination">
+							<li th:class="${page.firstPage} ? 'disabled' : ''">
+								<span th:if='${page.firstPage}'>← First</span>
+								<a th:if='${not page.firstPage}' th:href='@{${page.url}(page.page=1,page.size=${page.size},virtue_id=${virtue_id})}'>← First</a>
+							</li>
+							<li th:class="${page.hasPreviousPage}? '' : 'disabled'">
+								<span th:if='${not page.hasPreviousPage}'>«</span>
+								<a th:if='${page.hasPreviousPage}' th:href='@{${page.url}(page.page=${page.number-1},page.size=${page.size},virtue_id=${virtue_id})}' title='Go to previous page'>«</a>
+							</li>
+							<li th:each="item : ${page.items}" th:class="${item.current}? 'active' : ''">
+								<span th:if='${item.current}' th:text='${item.number}'>1</span>
+								<a th:if='${not item.current}' th:href='@{${page.url}(page.page=${item.number},page.size=${page.size},virtue_id=${virtue_id})}'><span th:text='${item.number}'>1</span></a>
+							</li>
+							<li th:class="${page.hasNextPage}? '' : 'disabled'">
+								<span th:if='${not page.hasNextPage}'>»</span>
+								<a th:id="${page.hasNextPage}? 'nextPage' : ''" th:if='${page.hasNextPage}' th:href='@{${page.url}(page.page=${page.number+1},page.size=${page.size},virtue_id=${virtue_id})}' title='Go to next page'>»</a>
+							</li>
+							<li th:class="${page.lastPage}? 'disabled' : ''">
+								<span th:if='${page.lastPage}'>Last →</span>
+								<a th:if='${not page.lastPage}' th:href='@{${page.url}(page.page=${page.totalPages},page.size=${page.size},virtue_id=${virtue_id})}'>Last →</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+
+			</div>
+       </div>
+	</div>
+
+	<footer id="fh5co-footer">
+		
+		<div class="container">
+			<div class="row row-padded">
+				<div class="col-md-12 text-center">
+					<!--<p class="fh5co-social-icons">-->
+						<!--<a href="#"><i class="icon-twitter"></i></a>-->
+						<!--<a href="#"><i class="icon-facebook"></i></a>-->
+						<!--<a href="#"><i class="icon-instagram"></i></a>-->
+						<!--<a href="#"><i class="icon-dribbble"></i></a>-->
+						<!--<a href="#"><i class="icon-youtube"></i></a>-->
+					<!--</p>-->
+					<p><small>&copy; Life Quotes. All Rights Reserved. </small></p>
+				</div>
+			</div>
+		</div>
+	</footer>
+
+
+	<!-- jQuery -->
+	<script src="js/jquery.min.js"></script>
+	<!-- jQuery Easing -->
+	<script src="js/jquery.easing.1.3.js"></script>
+	<!-- Bootstrap -->
+	<script src="js/bootstrap.min.js"></script>
+	<!-- Waypoints -->
+	<script src="js/jquery.waypoints.min.js"></script>
+	<!-- Magnific Popup -->
+	<script src="js/jquery.magnific-popup.min.js"></script>
+	<!-- Salvattore -->
+	<script src="js/salvattore.min.js"></script>
+	<!-- Main JS -->
+	<script src="js/main.js"></script>
+
+	<script src="js/jquery.jscroll.min.js"></script>
+	<script>
+
+		$(document).ready(function(){
+			$('#fh5co-main.container.row').jscroll({
+				loadingHtml: '<img src="loading.gif" alt="Loading" /> Loading...',
+				padding: 20,
+				nextSelector: '#nextPage',
+				contentSelector: '#fh5co-board'
+			});
+		});
+
+
+
+	</script>
+	
+	</body>
+</html>

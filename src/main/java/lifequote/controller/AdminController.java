@@ -1,6 +1,7 @@
 package lifequote.controller;
 
 import lifequote.domain.*;
+import lifequote.model.QuoteBrowserUIModel;
 import lifequote.model.QuoteUIModel;
 import lifequote.storage.StorageFileNotFoundException;
 import lifequote.storage.StorageService;
@@ -27,6 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -88,7 +90,7 @@ public class AdminController {
             //String imageFileName=quote1.getName()+quote1.getAuthor().getName()+ quote1.getVirtue().getName();
             String imageFileName= UUID.randomUUID().toString().replace("-","")+"."+file.getOriginalFilename().split("\\.")[1];
             storageService.store(file,imageFileName);
-            quote1.setImageRelativeUrl("/images/"+imageFileName);
+            quote1.setImageRelativeUrl("/quote_images/"+imageFileName);
         }
 
         if (quoteRepository.save(quote1)!=null){
@@ -104,7 +106,7 @@ public class AdminController {
         return "redirect:/admin/quote";
     }
 
-    @GetMapping("/images/{filename:.+}")
+    @GetMapping("/quote_images/{filename:.+}")
     @ResponseBody
     public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
         log.info("get file:" + filename);
@@ -117,6 +119,66 @@ public class AdminController {
 
 //
 
+
+    @GetMapping("/")
+    public String getQuoteBrowser(@ModelAttribute QuoteBrowserUIModel quoteBrowserUIModel, Model model,  Pageable pageable,@RequestParam(value = "page.page",defaultValue = "1") Integer pageNum,@RequestParam(value = "page.size",defaultValue = "20") Integer pageSize,@RequestParam(value = "virtue_id",defaultValue = "-1") Long virtue_id) {
+
+
+        if (pageNum != null && pageSize != null){
+            if (pageNum > 0)
+                pageable = new PageRequest(pageNum-1,pageSize);
+        }
+
+//        if (quoteBrowserUIModel == null) {
+//            quoteBrowserUIModel = new QuoteBrowserUIModel();
+//            quoteBrowserUIModel.setPageNum(pageNum);
+//            quoteBrowserUIModel.setPageSize(pageSize);
+//        }
+
+
+
+       // pageable = new PageRequest(quoteBrowserUIModel.getPageNum()-1,quoteBrowserUIModel.getPageSize());
+
+
+        Page<Quote> quotePage = null;
+
+        if (virtue_id == -1) {
+            quotePage = quoteRepository.findAll(pageable);
+        }
+        else {
+            quotePage = quoteRepository.findByVirtue_Id(virtue_id,pageable);
+        }
+
+        if (quotePage != null) {
+            quoteBrowserUIModel.setTotalElement(quotePage.getTotalElements());
+
+            List<QuoteUIModel> quoteUIModelList = new ArrayList<>();
+            for (Quote quote : quotePage.getContent()) {
+                QuoteUIModel quoteUIModel = new QuoteUIModel();
+                quoteUIModel.setImageRelativeUrl(quote.getImageRelativeUrl());
+                quoteUIModel.setDescription(quote.getDescription());
+                quoteUIModelList.add(quoteUIModel);
+            }
+
+            quoteBrowserUIModel.setQuoteUIModelList(quoteUIModelList);
+            model.addAttribute("quoteBrowser", quoteBrowserUIModel);
+            PageWrapper<lifequote.domain.Quote> page = new PageWrapper<lifequote.domain.Quote>
+                    (quotePage, "/");
+            model.addAttribute("page", page);
+            if (virtue_id != -1)
+                model.addAttribute("virtue_id",virtue_id);
+        }
+
+        List<Virtue> virtues = virtueRepository.findAll();
+        model.addAttribute("virtues",virtues);
+
+        log.info("getQuoteBrowser: "+quoteBrowserUIModel);
+
+        //if (page.getNumber() == 1)
+            return "index";
+        //else
+          //  return "index_quote";
+    }
 
 
     @GetMapping("/admin/quote/add")

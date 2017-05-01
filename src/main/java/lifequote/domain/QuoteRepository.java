@@ -26,7 +26,7 @@ public interface QuoteRepository extends JpaRepository<Quote, Long> {
     Page<Quote> findByAuthor_Id(@Param("authorId") Long authorId,Pageable pageable);
 
     @Cacheable(value = "quote.findByVirtueId",sync = true)
-    List<Quote> findByVirtue_Id(@Param("virtueId") Long authorId);
+    Page<Quote> findByVirtue_Id(@Param("virtueId") Long authorId,Pageable pageable);
 
     @Cacheable(value = "quote.findByName",sync = true)
     List<Quote> findByName(@Param("name") String name);
